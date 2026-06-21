@@ -1,5 +1,5 @@
 import { Users, ShieldCheck, DollarSign, ShoppingBag, UserMinus, UserCheck, Check, X, Settings, Key, RefreshCw, Database } from 'lucide-react';
-import { User, SellerProfile, Product, Order } from '../data/mockData';
+import { type User, SellerProfile, Product, Order } from '../data/mockData';
 import { useState } from 'react';
 
 interface AdminPanelProps {

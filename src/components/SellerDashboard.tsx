@@ -19,7 +19,7 @@ import {
   Award,
   CheckCircle2
 } from 'lucide-react';
-import { Product, Order, User, SUBSCRIPTION_PLANS, APP_FEATURES, SellerProfile } from '../data/mockData';
+import { Product, Order, type User, SUBSCRIPTION_PLANS, APP_FEATURES, SellerProfile } from '../data/mockData';
 
 interface SellerDashboardProps {
   products: Product[];
@@ -30,6 +30,7 @@ interface SellerDashboardProps {
   onUpdateProductStatus: (productId: number, status: 'active' | 'inactive') => void;
   onUpdateOrderStatus: (orderId: number, newStatus: Order['status']) => void;
   onUpgradeSubscription: (planId: string) => void;
+  onCancelOrder: (orderId: number) => void;
 }
 
 export default function SellerDashboard({
@@ -40,7 +41,8 @@ export default function SellerDashboard({
   onAddProduct,
   onUpdateProductStatus,
   onUpdateOrderStatus,
-  onUpgradeSubscription
+  onUpgradeSubscription,
+  onCancelOrder
 }: SellerDashboardProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'inventory' | 'orders' | 'subscription' | 'docs'>('overview');
   const [showAddForm, setShowAddForm] = useState(false);
@@ -354,8 +356,8 @@ export default function SellerDashboard({
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 self-end md:self-center">
-                      {order.status !== 'completed' && (
+                    <div className="flex flex-col items-end gap-3 self-end md:self-center">
+                      {order.status !== 'completed' && order.status !== 'cancelled' && (
                         <button 
                           onClick={() => {
                             const statuses: Order['status'][] = ['pending', 'preparing', 'shipped', 'completed'];
@@ -368,6 +370,14 @@ export default function SellerDashboard({
                             order.status === 'pending' ? 'Prepare' : 
                             order.status === 'preparing' ? 'Ship' : 'Deliver'
                           }
+                        </button>
+                      )}
+                      {order.status === 'pending' && (
+                        <button
+                          onClick={() => onCancelOrder(order.id)}
+                          className="text-[10px] text-rose-500 font-bold hover:underline"
+                        >
+                          Decline Order
                         </button>
                       )}
                     </div>

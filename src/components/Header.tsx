@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ShoppingCart, Wallet, Layers, ShoppingBag, Trash2, ChevronDown, Plus, ShieldCheck, Terminal } from 'lucide-react';
-import { User, OrderItem } from '../data/mockData';
+import { ShoppingCart, Wallet, Layers, ShoppingBag, Trash2, ChevronDown, Plus, ShieldCheck, Terminal, Bell, User, Check } from 'lucide-react';
+import type { User as UserType, OrderItem } from '../data/mockData';
 
 interface HeaderProps {
-  currentUser: User | null;
+  currentUser: UserType | null;
   currentTab: string;
   onTabChange: (tab: string) => void;
   cart: OrderItem[];
@@ -12,6 +12,8 @@ interface HeaderProps {
   onOpenAuth: () => void;
   onLogout: () => void;
   onChangeRole: (role: 'admin' | 'seller' | 'buyer') => void;
+  notifications?: any[];
+  onMarkNotificationRead?: (id: number) => void;
 }
 
 export default function Header({
@@ -24,24 +26,32 @@ export default function Header({
   onOpenAuth,
   onLogout,
   onChangeRole,
+  notifications = [],
+  onMarkNotificationRead
 }: HeaderProps) {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
   const [shippingAddress, setShippingAddress] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [checkoutError, setCheckoutError] = useState('');
 
   const cartRef = useRef<HTMLDivElement>(null);
+  const notificationsRef = useRef<HTMLDivElement>(null);
   const roleRef = useRef<HTMLDivElement>(null);
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const unreadNotifications = notifications.filter(n => !n.is_read).length;
 
   // ── Close dropdowns on outside click ──────────────────────────────────────
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (cartRef.current && !cartRef.current.contains(e.target as Node)) {
         setIsCartOpen(false);
+      }
+      if (notificationsRef.current && !notificationsRef.current.contains(e.target as Node)) {
+        setIsNotificationsOpen(false);
       }
       if (roleRef.current && !roleRef.current.contains(e.target as Node)) {
         setIsRoleDropdownOpen(false);
@@ -72,35 +82,48 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+    <header className="sticky top-0 z-40 bg-midnight/80 backdrop-blur-2xl border-b border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => onTabChange('marketplace')}>
-            <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-600/20">
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onTabChange('marketplace')}>
+            <div className="bg-cyber-indigo p-2.5 rounded-2xl text-white shadow-[0_0_20px_-5px_rgba(99,102,241,0.6)] group-hover:scale-110 transition-all duration-500">
               <ShoppingBag className="h-5 w-5" />
             </div>
             <div>
-              <span className="font-bold text-lg text-white tracking-tight block sm:inline">UniMart</span>
-              <span className="hidden sm:inline-block text-[10px] text-indigo-400 font-medium ml-1.5 px-1.5 py-0.5 rounded bg-indigo-950 border border-indigo-800/40">
-                CAMPUS HUB
+              <span className="font-black text-xl text-white tracking-tighter block sm:inline uppercase">UniMart</span>
+              <span className="hidden sm:inline-block text-[10px] text-cyber-cyan font-bold ml-1.5 px-2 py-0.5 rounded-full bg-cyber-indigo/10 border border-cyber-indigo/20 tracking-widest uppercase">
+                Nexus
               </span>
             </div>
           </div>
 
           {/* Main Tabs */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             <button
               onClick={() => onTabChange('marketplace')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all cursor-pointer ${
                 currentTab === 'marketplace'
-                  ? 'bg-slate-800 text-white border-t-2 border-indigo-500 rounded-t-xl rounded-b-none'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                  ? 'bg-white/5 text-white border-b-2 border-cyber-indigo'
+                  : 'text-slate-500 hover:text-white hover:bg-white/5'
               }`}
             >
-              Marketplace
+              Explore
             </button>
+
+            {currentUser && currentUser.role === 'buyer' && (
+              <button
+                onClick={() => onTabChange('buyer')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  currentTab === 'buyer'
+                    ? 'bg-slate-800 text-white border-t-2 border-rose-500 rounded-t-xl rounded-b-none'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                }`}
+              >
+                My Dashboard
+              </button>
+            )}
 
             {currentUser && (currentUser.role === 'seller' || currentUser.role === 'admin') && (
               <button
@@ -144,20 +167,76 @@ export default function Header({
           {/* Right Controls */}
           <div className="flex items-center gap-3">
 
+            {/* Notifications */}
+            {currentUser && (
+              <div className="relative" ref={notificationsRef}>
+                <button
+                  onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                  className="bg-slate-900 border border-slate-800 hover:border-slate-700 p-2.5 rounded-xl text-slate-300 hover:text-white transition-all relative cursor-pointer"
+                >
+                  <Bell className="h-4 w-4" />
+                  {unreadNotifications > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-cyber-indigo text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-midnight">
+                      {unreadNotifications}
+                    </span>
+                  )}
+                </button>
+
+                {isNotificationsOpen && (
+                  <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 z-50">
+                    <h3 className="text-sm font-bold text-slate-200 mb-3 border-b border-slate-800 pb-2">
+                      Notifications
+                    </h3>
+                    <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                      {notifications.length === 0 ? (
+                        <p className="text-xs text-slate-500 text-center py-4">No notifications yet.</p>
+                      ) : (
+                        notifications.map(n => (
+                          <div
+                            key={n.id}
+                            className={`p-3 rounded-xl border transition-all ${n.is_read ? 'bg-slate-950/40 border-transparent opacity-60' : 'bg-indigo-500/5 border-indigo-500/20'}`}
+                          >
+                            <div className="flex justify-between items-start gap-2">
+                              <div>
+                                <p className="text-xs font-bold text-white">{n.title}</p>
+                                <p className="text-[10px] text-slate-400 mt-0.5">{n.message}</p>
+                              </div>
+                              {!n.is_read && (
+                                <button
+                                  onClick={() => onMarkNotificationRead?.(n.id)}
+                                  className="p-1 hover:bg-indigo-500/20 rounded-md text-indigo-400 transition-all"
+                                  title="Mark as read"
+                                >
+                                  <Check className="h-3 w-3" />
+                                </button>
+                              )}
+                            </div>
+                            <p className="text-[8px] text-slate-600 mt-2 uppercase font-bold tracking-tighter">
+                              {new Date(n.created_at).toLocaleString()}
+                            </p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* User Session / Role Switcher */}
             {currentUser ? (
               <div className="flex items-center gap-2">
 
                 {/* Wallet Balance */}
-                <div className="hidden sm:flex items-center bg-slate-900 border border-slate-800 rounded-xl py-1 px-3 text-xs text-slate-300 gap-1.5">
-                  <Wallet className="h-3.5 w-3.5 text-indigo-400" />
-                  <span className="font-mono font-bold">${currentUser.balance.toFixed(2)}</span>
+          <div className="hidden sm:flex items-center glass-card border border-white/5 rounded-2xl py-1.5 px-4 text-xs text-slate-300 gap-2">
+            <Wallet className="h-4 w-4 text-cyber-cyan" />
+            <span className="font-mono font-black text-white tracking-tighter">${currentUser.balance.toFixed(2)}</span>
                   <button
                     onClick={() => {}}
-                    title="Balance reflects your account. Payments via Paystack."
-                    className="ml-1 bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white p-0.5 rounded transition-all cursor-pointer"
+              title="Balance reflects your account."
+              className="ml-1 bg-cyber-indigo/20 hover:bg-cyber-indigo text-cyber-indigo hover:text-white p-0.5 rounded-lg transition-all cursor-pointer"
                   >
-                    <Plus className="h-3 w-3" />
+              <Plus className="h-3.5 w-3.5" />
                   </button>
                 </div>
 
@@ -182,29 +261,14 @@ export default function Header({
 
                   {isRoleDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1.5 z-50">
-                      <div className="px-3 py-1 border-b border-slate-800 text-[10px] font-bold text-slate-500 uppercase">
-                        Switch Demo Session
+                      <div className="px-3 py-1 border-b border-slate-800 text-[10px] font-bold text-slate-200">
+                        Account Settings
                       </div>
                       <button
-                        onClick={() => handleQuickRoleChange('admin')}
-                        className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-red-950/20 hover:text-red-400 flex items-center gap-2 cursor-pointer"
+                        onClick={() => { onTabChange(currentUser.role === 'buyer' ? 'buyer' : currentUser.role === 'seller' ? 'seller' : 'admin'); setIsRoleDropdownOpen(false); }}
+                        className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 flex items-center gap-2 cursor-pointer"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                        Admin — Alex (alex_lead_admin)
-                      </button>
-                      <button
-                        onClick={() => handleQuickRoleChange('seller')}
-                        className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-amber-950/20 hover:text-amber-400 flex items-center gap-2 cursor-pointer"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                        Seller — Sarah (sarah_bags)
-                      </button>
-                      <button
-                        onClick={() => handleQuickRoleChange('buyer')}
-                        className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-emerald-950/20 hover:text-emerald-400 flex items-center gap-2 cursor-pointer"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        Buyer — Jordan (jordan_buyer)
+                        <User className="h-3.5 w-3.5" /> Profile Settings
                       </button>
                       <div className="border-t border-slate-800 my-1" />
                       <button

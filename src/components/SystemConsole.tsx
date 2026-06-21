@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Terminal, Database, Code, GitFork, Play, Copy, Check, ShieldAlert } from 'lucide-react';
-import { User, Product, Order, SellerProfile, ApiLog, BACKEND_CODE_SNIPPETS } from '../data/mockData';
+import { type User, Product, Order, SellerProfile, ApiLog, BACKEND_CODE_SNIPPETS } from '../data/mockData';
 
 interface SystemConsoleProps {
   users: User[];
@@ -21,7 +21,7 @@ export default function SystemConsole({
   onClearLogs,
   onExecuteRawSql
 }: SystemConsoleProps) {
-  const [activeSubTab, setActiveSubTab] = useState<'database' | 'logs' | 'code' | 'architecture'>('database');
+  const [activeSubTab, setActiveSubTab] = useState<'database' | 'logs' | 'code' | 'architecture'>('logs');
   const [selectedDbTable, setSelectedDbTable] = useState<'users' | 'products' | 'orders' | 'seller_profiles'>('users');
   const [sqlQuery, setSqlQuery] = useState('SELECT * FROM products WHERE is_preorder = 1;');
   const [sqlResult, setSqlResult] = useState<{ success: boolean; message: string; rows?: any[] } | null>(null);
