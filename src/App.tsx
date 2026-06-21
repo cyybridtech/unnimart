@@ -308,7 +308,7 @@ function UniMartApp() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 flex flex-col">
+    <div className="min-h-screen bg-midnight font-sans text-slate-200 selection:bg-cyber-indigo/30 selection:text-white pb-24 md:pb-0">
       <Header
         currentUser={user}
         currentTab={currentTab}

@@ -82,7 +82,7 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-midnight/80 backdrop-blur-2xl border-b border-white/5">
+    <header className="sticky top-0 z-40 bg-midnight/90 backdrop-blur-3xl border-b border-white/10 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
@@ -165,11 +165,11 @@ export default function Header({
           </nav>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
 
-            {/* Notifications */}
+            {/* Notifications - Hidden on Mobile, moved to dashboards */}
             {currentUser && (
-              <div className="relative" ref={notificationsRef}>
+              <div className="hidden sm:block relative" ref={notificationsRef}>
                 <button
                   onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
                   className="bg-slate-900 border border-slate-800 hover:border-slate-700 p-2.5 rounded-xl text-slate-300 hover:text-white transition-all relative cursor-pointer"
@@ -225,7 +225,7 @@ export default function Header({
 
             {/* User Session / Role Switcher */}
             {currentUser ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
 
                 {/* Wallet Balance - Compact on mobile */}
                 <div className="flex items-center glass-card border border-white/5 rounded-xl sm:rounded-2xl py-1 sm:py-1.5 px-2.5 sm:px-4 text-[10px] sm:text-xs text-slate-300 gap-1.5 sm:gap-2">
@@ -244,10 +244,10 @@ export default function Header({
                 <div className="relative" ref={roleRef}>
                   <button
                     onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                    className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-2 sm:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-200 transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-2 sm:px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold text-slate-200 transition-all cursor-pointer"
                   >
                     <div
-                      className={`w-2 h-2 rounded-full shrink-0 ${
+                      className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${
                         currentUser.role === 'admin'
                           ? 'bg-red-500 shadow-sm shadow-red-500'
                           : currentUser.role === 'seller'
@@ -257,7 +257,7 @@ export default function Header({
                     />
                     <span className="capitalize hidden sm:inline">{currentUser.username} ({currentUser.role})</span>
                     <span className="capitalize sm:hidden">{currentUser.username.charAt(0).toUpperCase()}</span>
-                    <ChevronDown className="h-3 w-3 text-slate-400 shrink-0" />
+                    <ChevronDown className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-slate-400 shrink-0" />
                   </button>
 
                   {isRoleDropdownOpen && (
@@ -412,71 +412,71 @@ export default function Header({
       </div>
 
       {/* Mobile Navigation Bar - Premium Glassmorphic design */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-midnight/90 backdrop-blur-xl border-t border-white/5 flex justify-around py-3 pb-6 px-2 safe-bottom">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-midnight/95 backdrop-blur-2xl border-t border-white/10 flex justify-around py-3 pb-8 px-2 safe-bottom shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)]">
         <button
           onClick={() => onTabChange('marketplace')}
-          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
-            currentTab === 'marketplace' ? 'text-cyber-indigo' : 'text-slate-500'
+          className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
+            currentTab === 'marketplace' ? 'text-cyber-indigo' : 'text-slate-400'
           }`}
         >
-          <div className={`p-1.5 rounded-lg ${currentTab === 'marketplace' ? 'bg-cyber-indigo/10' : ''}`}>
-            <ShoppingBag className="h-5 w-5" />
+          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'marketplace' ? 'bg-cyber-indigo/20' : 'bg-transparent'}`}>
+            <ShoppingBag className="h-6 w-6" />
           </div>
-          <span className="text-[8px] font-black tracking-[0.1em] uppercase">Market</span>
+          <span className="text-[10px] font-black tracking-widest uppercase">Market</span>
         </button>
         
         {currentUser && (currentUser.role === 'seller' || currentUser.role === 'admin') && (
           <button
             onClick={() => onTabChange('seller')}
-            className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
-              currentTab === 'seller' ? 'text-amber-400' : 'text-slate-500'
+            className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
+              currentTab === 'seller' ? 'text-amber-400' : 'text-slate-400'
             }`}
           >
-            <div className={`p-1.5 rounded-lg ${currentTab === 'seller' ? 'bg-amber-400/10' : ''}`}>
-              <Layers className="h-5 w-5" />
+            <div className={`p-2 rounded-xl transition-colors ${currentTab === 'seller' ? 'bg-amber-400/20' : 'bg-transparent'}`}>
+              <Layers className="h-6 w-6" />
             </div>
-            <span className="text-[8px] font-black tracking-[0.1em] uppercase">Seller</span>
+            <span className="text-[10px] font-black tracking-widest uppercase">Seller</span>
           </button>
         )}
 
         {currentUser && currentUser.role === 'admin' && (
           <button
             onClick={() => onTabChange('admin')}
-            className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
-              currentTab === 'admin' ? 'text-red-400' : 'text-slate-500'
+            className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
+              currentTab === 'admin' ? 'text-red-400' : 'text-slate-400'
             }`}
           >
-            <div className={`p-1.5 rounded-lg ${currentTab === 'admin' ? 'bg-red-400/10' : ''}`}>
-              <ShieldCheck className="h-5 w-5" />
+            <div className={`p-2 rounded-xl transition-colors ${currentTab === 'admin' ? 'bg-red-400/20' : 'bg-transparent'}`}>
+              <ShieldCheck className="h-6 w-6" />
             </div>
-            <span className="text-[8px] font-black tracking-[0.1em] uppercase">Admin</span>
+            <span className="text-[10px] font-black tracking-widest uppercase">Admin</span>
           </button>
         )}
 
         {currentUser && currentUser.role === 'buyer' && (
           <button
             onClick={() => onTabChange('buyer')}
-            className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
-              currentTab === 'buyer' ? 'text-rose-400' : 'text-slate-500'
+            className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
+              currentTab === 'buyer' ? 'text-rose-400' : 'text-slate-400'
             }`}
           >
-            <div className={`p-1.5 rounded-lg ${currentTab === 'buyer' ? 'bg-rose-400/10' : ''}`}>
-              <User className="h-5 w-5" />
+            <div className={`p-2 rounded-xl transition-colors ${currentTab === 'buyer' ? 'bg-rose-400/20' : 'bg-transparent'}`}>
+              <User className="h-6 w-6" />
             </div>
-            <span className="text-[8px] font-black tracking-[0.1em] uppercase">Me</span>
+            <span className="text-[10px] font-black tracking-widest uppercase">Me</span>
           </button>
         )}
 
         <button
           onClick={() => onTabChange('console')}
-          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
-            currentTab === 'console' ? 'text-emerald-400' : 'text-slate-500'
+          className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
+            currentTab === 'console' ? 'text-emerald-400' : 'text-slate-400'
           }`}
         >
-          <div className={`p-1.5 rounded-lg ${currentTab === 'console' ? 'bg-emerald-400/10' : ''}`}>
-            <Terminal className="h-5 w-5" />
+          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'console' ? 'bg-emerald-400/20' : 'bg-transparent'}`}>
+            <Terminal className="h-6 w-6" />
           </div>
-          <span className="text-[8px] font-black tracking-[0.1em] uppercase">Console</span>
+          <span className="text-[10px] font-black tracking-widest uppercase">Console</span>
         </button>
       </div>
     </header>
