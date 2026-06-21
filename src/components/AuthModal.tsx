@@ -260,7 +260,7 @@ export default function AuthModal({ isOpen, onClose, onLogin, onRegister, demoUs
                   <input
                     type="email"
                     required
-                    placeholder="e.g. admin@unimart.edu"
+                    placeholder="e.g. Mail@mail.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-base sm:text-sm text-slate-200 placeholder-slate-700 focus:outline-hidden transition-all"

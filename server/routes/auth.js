@@ -65,7 +65,8 @@ router.post('/login', async (req, res) => {
     const { password_hash, ...userWithoutPassword } = user;
     res.json({ token, user: userWithoutPassword });
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 });
 
