@@ -12,29 +12,29 @@ interface BuyerDashboardProps {
 export default function BuyerDashboard({ orders, wishlistItems, onTabChange, onCancelOrder }: BuyerDashboardProps) {
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-card p-8 rounded-[2.5rem] space-y-2 neon-border">
-          <span className="text-[10px] font-black text-cyber-indigo uppercase tracking-widest">Orders Placed</span>
-          <div className="text-4xl font-black text-white font-mono tracking-tighter">{orders.length}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div className="glass-card p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] space-y-1 sm:space-y-2 neon-border">
+          <span className="text-[9px] sm:text-[10px] font-black text-cyber-indigo uppercase tracking-widest">Orders Placed</span>
+          <div className="text-3xl sm:text-4xl font-black text-white font-mono tracking-tighter">{orders.length}</div>
         </div>
-        <div className="glass-card p-8 rounded-[2.5rem] space-y-2 neon-border">
-          <span className="text-[10px] font-black text-rose-400 uppercase tracking-widest">Wishlist items</span>
-          <div className="text-4xl font-black text-white font-mono tracking-tighter">{wishlistItems.length}</div>
+        <div className="glass-card p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] space-y-1 sm:space-y-2 neon-border">
+          <span className="text-[9px] sm:text-[10px] font-black text-rose-400 uppercase tracking-widest">Wishlist items</span>
+          <div className="text-3xl sm:text-4xl font-black text-white font-mono tracking-tighter">{wishlistItems.length}</div>
         </div>
-        <div className="glass-card p-8 rounded-[2.5rem] space-y-2 neon-border">
-          <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">Reviews Written</span>
-          <div className="text-4xl font-black text-white font-mono tracking-tighter">0</div>
+        <div className="glass-card p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] space-y-1 sm:space-y-2 neon-border">
+          <span className="text-[9px] sm:text-[10px] font-black text-amber-400 uppercase tracking-widest">Reviews Written</span>
+          <div className="text-3xl sm:text-4xl font-black text-white font-mono tracking-tighter">0</div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Orders */}
-        <section className="glass-card rounded-[2.5rem] overflow-hidden">
-          <div className="p-8 border-b border-white/5 flex justify-between items-center">
-            <h3 className="text-lg font-black text-white uppercase tracking-tighter">Purchase History</h3>
+        <section className="glass-card rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden">
+          <div className="p-6 sm:p-8 border-b border-white/5 flex justify-between items-center">
+            <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-tighter">Purchase History</h3>
             <ShoppingBag className="h-5 w-5 text-cyber-indigo" />
           </div>
-          <div className="p-8 space-y-6">
+          <div className="p-6 sm:p-8 space-y-6">
             {orders.length === 0 ? (
               <p className="text-sm text-slate-500 italic text-center py-10">No orders yet. Ready to shop?</p>
             ) : (
@@ -66,12 +66,12 @@ export default function BuyerDashboard({ orders, wishlistItems, onTabChange, onC
         </section>
 
         {/* Wishlist Preview */}
-        <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden">
-          <div className="p-8 border-b border-white/5 flex justify-between items-center">
-            <h3 className="text-lg font-black text-white uppercase tracking-tighter">Wishlist</h3>
+        <section className="bg-slate-900 border border-white/5 rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden">
+          <div className="p-6 sm:p-8 border-b border-white/5 flex justify-between items-center">
+            <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-tighter">Wishlist</h3>
             <Heart className="h-5 w-5 text-rose-400" />
           </div>
-          <div className="p-8 space-y-4">
+          <div className="p-6 sm:p-8 space-y-4">
             {wishlistItems.length === 0 ? (
               <p className="text-sm text-slate-500 italic text-center py-10">Your wishlist is empty.</p>
             ) : (

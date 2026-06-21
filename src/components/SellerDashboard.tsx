@@ -100,8 +100,8 @@ export default function SellerDashboard({
   return (
     <div className="flex flex-col lg:flex-row gap-8">
       {/* Side Navigation - Shopify Style */}
-      <aside className="w-full lg:w-64 space-y-2">
-        <div className="p-6 bg-slate-900 border border-white/5 rounded-[2rem] space-y-6">
+      <aside className="w-full lg:w-64 space-y-2 mb-6 lg:mb-0">
+        <div className="p-5 sm:p-6 bg-slate-900 border border-white/5 rounded-[2rem] space-y-4 sm:space-y-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white">
               <LayoutDashboard className="h-5 w-5" />
@@ -112,7 +112,7 @@ export default function SellerDashboard({
             </div>
           </div>
 
-          <nav className="space-y-1">
+          <nav className="grid grid-cols-2 sm:grid-cols-1 lg:block gap-2 sm:space-y-1">
             <button 
               onClick={() => setActiveTab('overview')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${activeTab === 'overview' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-400 hover:bg-slate-800'}`}
@@ -156,7 +156,7 @@ export default function SellerDashboard({
         </div>
 
         {/* System Health Widget */}
-        <div className="p-6 bg-slate-900 border border-white/5 rounded-[2rem] space-y-4">
+        <div className="hidden sm:block p-6 bg-slate-900 border border-white/5 rounded-[2rem] space-y-4">
           <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
             <Database className="h-3 w-3" /> Relational Status
           </h4>
@@ -179,49 +179,49 @@ export default function SellerDashboard({
         {activeTab === 'overview' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
             {/* KPI Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-slate-900 border border-white/5 p-8 rounded-[2rem] relative overflow-hidden group">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+              <div className="bg-slate-900 border border-white/5 p-6 sm:p-8 rounded-[2rem] relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                   <TrendingUp className="h-24 w-24" />
                 </div>
-                <div className="relative z-10 space-y-2">
+                <div className="relative z-10 space-y-1.5 sm:space-y-2">
                   <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Revenue Audit</span>
-                  <div className="text-4xl font-black text-white font-mono">${totalRevenue.toFixed(2)}</div>
-                  <div className="flex items-center justify-between gap-1.5 text-[10px] text-emerald-400 font-bold">
+                  <div className="text-3xl sm:text-4xl font-black text-white font-mono">${totalRevenue.toFixed(2)}</div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-[9px] sm:text-[10px] text-emerald-400 font-bold">
                     <span>Net Payout: ${netEarnings.toFixed(2)}</span>
-                    <span className="text-slate-500">(100% of gross — Zero Fees)</span>
+                    <span className="text-slate-500 hidden sm:inline">(100% — Zero Fees)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-slate-900 border border-white/5 p-8 rounded-[2rem] relative overflow-hidden group">
+              <div className="bg-slate-900 border border-white/5 p-6 sm:p-8 rounded-[2rem] relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                   <ShoppingBag className="h-24 w-24" />
                 </div>
-                <div className="relative z-10 space-y-2">
+                <div className="relative z-10 space-y-1.5 sm:space-y-2">
                   <span className="text-[10px] font-black text-purple-400 uppercase tracking-widest">Order Volume</span>
-                  <div className="text-4xl font-black text-white font-mono">{sellerOrders.length}</div>
-                  <div className="text-xs text-slate-500 font-medium">Peer-to-peer fulfillments</div>
+                  <div className="text-3xl sm:text-4xl font-black text-white font-mono">{sellerOrders.length}</div>
+                  <div className="text-[10px] sm:text-xs text-slate-500 font-medium">Peer-to-peer fulfillments</div>
                 </div>
               </div>
 
-              <div className="bg-slate-900 border border-white/5 p-8 rounded-[2rem] relative overflow-hidden group">
+              <div className="bg-slate-900 border border-white/5 p-6 sm:p-8 rounded-[2rem] relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                   <Star className="h-24 w-24" />
                 </div>
-                <div className="relative z-10 space-y-2">
+                <div className="relative z-10 space-y-1.5 sm:space-y-2">
                   <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">Shop Rating</span>
-                  <div className="text-4xl font-black text-white font-mono">{sellerProfile?.rating?.toFixed(2) ?? '5.00'}</div>
-                  <div className="text-xs text-slate-500 font-medium">{sellerProfile?.verified ? 'Institutional verification active' : 'Verification pending'}</div>
+                  <div className="text-3xl sm:text-4xl font-black text-white font-mono">{sellerProfile?.rating?.toFixed(2) ?? '5.00'}</div>
+                  <div className="text-[10px] sm:text-xs text-slate-500 font-medium line-clamp-1">{sellerProfile?.verified ? 'Verified Active' : 'Verification Pending'}</div>
                 </div>
               </div>
             </div>
 
             {/* Analytics Chart */}
-            <div className="bg-slate-900 border border-white/5 p-8 rounded-[2rem]">
-              <div className="flex justify-between items-center mb-8">
+            <div className="bg-slate-900 border border-white/5 p-6 sm:p-8 rounded-[2rem]">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
                 <div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-tighter">Revenue Trends</h3>
+                  <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-tighter">Revenue Trends</h3>
                   <p className="text-xs text-slate-500">Live feed from sales_logs table</p>
                 </div>
                 <div className="flex gap-2">
@@ -255,21 +255,21 @@ export default function SellerDashboard({
 
         {activeTab === 'inventory' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-slate-900 border border-white/5 rounded-[2rem] overflow-hidden">
-            <div className="p-8 border-b border-white/5 flex justify-between items-center">
+            <div className="p-6 sm:p-8 border-b border-white/5 flex justify-between items-center">
               <div>
-                <h3 className="text-lg font-black text-white uppercase tracking-tighter">Inventory Core</h3>
-                <p className="text-xs text-slate-500">Managing {sellerProducts.length} unique SKU variants</p>
+                <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-tighter">Inventory Core</h3>
+                <p className="text-[10px] sm:text-xs text-slate-500 italic">Managing {sellerProducts.length} unique SKU variants</p>
               </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left">
+              <table className="w-full text-left min-w-[600px]">
                 <thead>
                   <tr className="border-b border-white/5 text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-950/20">
-                    <th className="px-8 py-5">Product SKU</th>
-                    <th className="px-8 py-5">Inventory Status</th>
-                    <th className="px-8 py-5">Sales Performance</th>
-                    <th className="px-8 py-5">Price Model</th>
-                    <th className="px-8 py-5 text-right">State Control</th>
+                    <th className="px-6 sm:px-8 py-4 sm:py-5">Product SKU</th>
+                    <th className="px-6 sm:px-8 py-4 sm:py-5">Inventory Status</th>
+                    <th className="px-6 sm:px-8 py-4 sm:py-5">Sales Performance</th>
+                    <th className="px-6 sm:px-8 py-4 sm:py-5">Price Model</th>
+                    <th className="px-6 sm:px-8 py-4 sm:py-5 text-right">State Control</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -318,17 +318,17 @@ export default function SellerDashboard({
         )}
 
         {activeTab === 'orders' && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 sm:space-y-6">
             {sellerOrders.length === 0 ? (
-              <div className="bg-slate-900 border border-white/5 rounded-[2rem] p-20 text-center space-y-4">
-                <ShoppingBag className="h-12 w-12 text-slate-700 mx-auto" />
-                <h3 className="text-lg font-black text-white uppercase tracking-tighter">Awaiting Transactions</h3>
-                <p className="text-sm text-slate-500 max-w-xs mx-auto">Once buyers checkout, their transactional logs will appear here for fulfillment.</p>
+              <div className="bg-slate-900 border border-white/5 rounded-[2rem] p-12 sm:p-20 text-center space-y-4">
+                <ShoppingBag className="h-10 sm:h-12 w-10 sm:w-12 text-slate-700 mx-auto" />
+                <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-tighter">Awaiting Transactions</h3>
+                <p className="text-[11px] sm:text-sm text-slate-500 max-w-xs mx-auto">Once buyers checkout, their transactional logs will appear here for fulfillment.</p>
               </div>
             ) : (
               sellerOrders.map(order => (
-                <div key={order.id} className="bg-slate-900 border border-white/5 rounded-[2rem] p-8 hover:border-indigo-500/30 transition-all group">
-                  <div className="flex flex-col md:flex-row justify-between gap-6">
+                <div key={order.id} className="bg-slate-900 border border-white/5 rounded-[2rem] p-6 sm:p-8 hover:border-indigo-500/30 transition-all group">
+                  <div className="flex flex-col lg:flex-row justify-between gap-6">
                     <div className="space-y-4 flex-1">
                       <div className="flex items-center gap-3">
                         <span className="text-xs font-black text-indigo-400 uppercase tracking-widest">Order ID: #{order.id}</span>
@@ -336,7 +336,7 @@ export default function SellerDashboard({
                           {order.status}
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                         <div className="space-y-1">
                           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Customer</span>
                           <div className="text-xs font-bold text-white">@{order.buyer_name}</div>
@@ -390,17 +390,17 @@ export default function SellerDashboard({
 
         {activeTab === 'subscription' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-            <div className="bg-slate-900 border border-white/5 rounded-[2rem] p-10 flex flex-col md:flex-row justify-between items-center gap-8">
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest">
+            <div className="bg-slate-900 border border-white/5 rounded-[2rem] p-8 sm:p-10 flex flex-col lg:flex-row justify-between items-center gap-6 sm:gap-8">
+              <div className="space-y-3 sm:space-y-4 text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest">
                   <Award className="h-3 w-3" /> Recurring Revenue Model
                 </div>
-                <h2 className="text-3xl font-black text-white">Your Nexus Subscription</h2>
-                <p className="text-slate-400 max-w-md text-sm leading-relaxed">
+                <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight">Your Nexus Subscription</h2>
+                <p className="text-slate-400 max-w-md text-xs sm:text-sm leading-relaxed mx-auto lg:mx-0">
                   UniMart has transitioned to a subscription-based platform. Choose a plan that fits your growth stage. No more platform fees for Pro and Enterprise members!
                 </p>
               </div>
-              <div className="bg-slate-950 border border-white/10 p-8 rounded-[2rem] text-center space-y-2 min-w-[240px]">
+              <div className="bg-slate-950 border border-white/10 p-6 sm:p-8 rounded-[2rem] text-center space-y-2 w-full lg:w-auto lg:min-w-[240px]">
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Current Plan</span>
                 <div className="text-2xl font-black text-white capitalize">{sellerProfile?.subscription?.plan_id || 'Free Tier'}</div>
                 <div className="text-[11px] text-emerald-400 font-bold">Status: {sellerProfile?.subscription?.status || 'Active'}</div>

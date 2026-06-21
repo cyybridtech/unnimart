@@ -76,23 +76,23 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
   return (
     <div className="space-y-10">
       {/* Hero Section */}
-      <section className="relative h-[480px] rounded-[3rem] overflow-hidden group">
+      <section className="relative h-[360px] sm:h-[480px] rounded-[2rem] sm:rounded-[3rem] overflow-hidden group">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1557683316-973673baf926?w=1600&auto=format&fit=crop&q=80"
             className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000"
             alt="Campus" 
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-midnight via-midnight/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-midnight via-midnight/80 sm:via-midnight/60 to-transparent" />
         </div>
         
-        <div className="relative h-full flex flex-col justify-center px-12 sm:px-20 max-w-4xl space-y-8">
+        <div className="relative h-full flex flex-col justify-center px-6 sm:px-20 max-w-4xl space-y-4 sm:space-y-8">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyber-indigo/10 border border-cyber-indigo/20 text-cyber-cyan text-[10px] font-black tracking-[0.2em] uppercase"
+            className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-cyber-indigo/10 border border-cyber-indigo/20 text-cyber-cyan text-[8px] sm:text-[10px] font-black tracking-[0.2em] uppercase w-fit"
           >
-            <Zap className="h-3 w-3 fill-cyber-cyan" />
+            <Zap className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-cyber-cyan" />
             The Nex-Gen Infrastructure
           </motion.div>
           
@@ -100,7 +100,7 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl sm:text-7xl font-black text-white leading-[0.9] tracking-tighter"
+            className="text-4xl sm:text-7xl font-black text-white leading-[0.9] tracking-tighter"
           >
             UNIMART <br />
             <span className="text-gradient">
@@ -112,7 +112,7 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-xl text-slate-400 max-w-xl leading-relaxed font-medium"
+            className="text-sm sm:text-xl text-slate-400 max-w-xl leading-relaxed font-medium"
           >
             Experience the definitive campus marketplace. Secure, lightning-fast, and powered by elite student entrepreneurs.
           </motion.p>
@@ -121,12 +121,12 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex gap-4"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2"
           >
-            <button className="bg-white text-midnight px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-cyber-cyan transition-colors shadow-2xl">
+            <button className="bg-white text-midnight px-8 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest hover:bg-cyber-cyan transition-colors shadow-2xl">
               Get Started
             </button>
-            <button className="glass-card px-10 py-4 rounded-2xl font-black text-xs text-white uppercase tracking-widest">
+            <button className="glass-card px-8 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs text-white uppercase tracking-widest">
               View Showcase
             </button>
           </motion.div>
@@ -134,9 +134,9 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
       </section>
 
       {/* Modern Filter Toolbar */}
-      <div className="sticky top-20 z-30 space-y-4">
-        <div className="bg-slate-950/80 backdrop-blur-xl border border-white/5 rounded-[1.5rem] p-4 flex flex-col lg:flex-row gap-6 items-center shadow-2xl">
-          <div className="relative flex-1 group">
+      <div className="sticky top-16 sm:top-20 z-30 space-y-4">
+        <div className="bg-slate-950/80 backdrop-blur-xl border border-white/5 rounded-[1.5rem] p-3 sm:p-4 flex flex-col lg:flex-row gap-4 sm:gap-6 items-center shadow-2xl">
+          <div className="relative w-full lg:flex-1 group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
             <input
               type="text"
@@ -147,12 +147,12 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
             />
           </div>
 
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none w-full lg:w-auto">
             {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                   selectedCategory === cat
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
                   : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
@@ -165,7 +165,7 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
 
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className={`p-3 rounded-xl border transition-all flex items-center gap-2 text-xs font-bold ${isFilterOpen ? 'bg-indigo-600 text-white border-indigo-500' : 'bg-slate-900 text-slate-400 border-slate-800'}`}
+            className={`w-full lg:w-auto p-2.5 sm:p-3 rounded-xl border transition-all flex items-center justify-center gap-2 text-[10px] sm:text-xs font-bold ${isFilterOpen ? 'bg-indigo-600 text-white border-indigo-500' : 'bg-slate-900 text-slate-400 border-slate-800'}`}
           >
             <Filter className="h-4 w-4" />
             Advanced
@@ -253,7 +253,7 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
       </div>
 
       {/* Product Discovery Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8 pb-10 sm:pb-0">
         <AnimatePresence mode="popLayout">
           {filteredProducts.map((product, idx) => {
             const isWishlisted = wishlist.includes(product.id);
@@ -286,32 +286,32 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
                   <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
 
-                <div className="p-6 space-y-4">
+                <div className="p-5 sm:p-6 space-y-3 sm:space-y-4">
                   <div>
-                    <span className="text-[11px] font-bold text-indigo-400 uppercase tracking-widest">{product.seller_name}</span>
-                    <h3 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">{product.name}</h3>
+                    <span className="text-[10px] sm:text-[11px] font-bold text-indigo-400 uppercase tracking-widest">{product.seller_name}</span>
+                    <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">{product.name}</h3>
                   </div>
 
-                  <div className="flex items-center gap-3 text-sm text-slate-400">
+                  <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-400">
                     <div className="flex items-center gap-1 text-amber-400">
-                      <Star className="h-4 w-4 fill-amber-400" />
+                      <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-amber-400" />
                       <span className="font-bold">{product.rating}</span>
                     </div>
                     <span className="w-1 h-1 rounded-full bg-slate-700" />
                     <span>{product.sales_count} sold</span>
                   </div>
 
-                  <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                    <div className="text-2xl font-black text-white font-mono tracking-tighter">${product.price.toFixed(2)}</div>
+                  <div className="pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between">
+                    <div className="text-xl sm:text-2xl font-black text-white font-mono tracking-tighter">${product.price.toFixed(2)}</div>
                     {currentUserRole !== 'admin' && currentUserRole !== 'seller' ? (
                       <button 
                         onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
-                        className="bg-cyber-indigo hover:bg-cyber-indigo/80 text-white p-4 rounded-2xl shadow-[0_0_20px_-5px_rgba(99,102,241,0.5)] active:scale-90 transition-all cursor-pointer"
+                        className="bg-cyber-indigo hover:bg-cyber-indigo/80 text-white p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-[0_0_20px_-5px_rgba(99,102,241,0.5)] active:scale-90 transition-all cursor-pointer"
                       >
-                        <ShoppingCart className="h-5 w-5" />
+                        <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                       </button>
                     ) : (
-                      <span className="text-[10px] text-slate-500 font-bold uppercase italic">Seller View</span>
+                      <span className="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase italic">Seller View</span>
                     )}
                   </div>
                 </div>
@@ -326,13 +326,13 @@ export default function Marketplace({ products, sellerProfiles, onAddToCart, cur
         {selectedProduct && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedProduct(null)} className="absolute inset-0 bg-slate-950/90 backdrop-blur-lg" />
-            <motion.div layoutId={`product-${selectedProduct.id}`} className="relative w-full max-w-5xl bg-slate-900 border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
-              <div className="md:w-[45%] h-[300px] md:h-auto bg-slate-950">
+            <motion.div layoutId={`product-${selectedProduct.id}`} className="relative w-full max-w-5xl bg-slate-900 border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
+              <div className="md:w-[45%] h-[240px] sm:h-[300px] md:h-auto bg-slate-950">
                 <img src={selectedProduct.image_url} alt={selectedProduct.name} className="w-full h-full object-cover" />
               </div>
-              <div className="flex-1 p-8 md:p-12 overflow-y-auto space-y-8">
+              <div className="flex-1 p-6 sm:p-8 md:p-12 overflow-y-auto space-y-6 sm:space-y-8">
                 <div>
-                  <h2 className="text-4xl font-black text-white">{selectedProduct.name}</h2>
+                  <h2 className="text-2xl sm:text-4xl font-black text-white">{selectedProduct.name}</h2>
                   <p className="text-slate-400 mt-4">{selectedProduct.description}</p>
                 </div>
 

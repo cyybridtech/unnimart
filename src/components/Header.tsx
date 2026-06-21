@@ -87,13 +87,13 @@ export default function Header({
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onTabChange('marketplace')}>
-            <div className="bg-cyber-indigo p-2.5 rounded-2xl text-white shadow-[0_0_20px_-5px_rgba(99,102,241,0.6)] group-hover:scale-110 transition-all duration-500">
-              <ShoppingBag className="h-5 w-5" />
+          <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group" onClick={() => onTabChange('marketplace')}>
+            <div className="bg-cyber-indigo p-2 rounded-xl sm:p-2.5 sm:rounded-2xl text-white shadow-[0_0_20px_-5px_rgba(99,102,241,0.6)] group-hover:scale-110 transition-all duration-500">
+              <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <div>
-              <span className="font-black text-xl text-white tracking-tighter block sm:inline uppercase">UniMart</span>
-              <span className="hidden sm:inline-block text-[10px] text-cyber-cyan font-bold ml-1.5 px-2 py-0.5 rounded-full bg-cyber-indigo/10 border border-cyber-indigo/20 tracking-widest uppercase">
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <span className="font-black text-lg sm:text-xl text-white tracking-tighter uppercase leading-none">UniMart</span>
+              <span className="hidden sm:inline-block text-[9px] sm:text-[10px] text-cyber-cyan font-bold sm:ml-1.5 px-1.5 sm:px-2 py-0.5 rounded-full bg-cyber-indigo/10 border border-cyber-indigo/20 tracking-widest uppercase mt-0.5 sm:mt-0">
                 Nexus
               </span>
             </div>
@@ -227,27 +227,27 @@ export default function Header({
             {currentUser ? (
               <div className="flex items-center gap-2">
 
-                {/* Wallet Balance */}
-          <div className="hidden sm:flex items-center glass-card border border-white/5 rounded-2xl py-1.5 px-4 text-xs text-slate-300 gap-2">
-            <Wallet className="h-4 w-4 text-cyber-cyan" />
-            <span className="font-mono font-black text-white tracking-tighter">${currentUser.balance.toFixed(2)}</span>
+                {/* Wallet Balance - Compact on mobile */}
+                <div className="flex items-center glass-card border border-white/5 rounded-xl sm:rounded-2xl py-1 sm:py-1.5 px-2.5 sm:px-4 text-[10px] sm:text-xs text-slate-300 gap-1.5 sm:gap-2">
+                  <Wallet className="h-3 w-3 sm:h-4 sm:w-4 text-cyber-cyan" />
+                  <span className="font-mono font-black text-white tracking-tighter">${currentUser.balance.toFixed(2)}</span>
                   <button
                     onClick={() => {}}
-              title="Balance reflects your account."
-              className="ml-1 bg-cyber-indigo/20 hover:bg-cyber-indigo text-cyber-indigo hover:text-white p-0.5 rounded-lg transition-all cursor-pointer"
+                    title="Balance reflects your account."
+                    className="hidden sm:block ml-1 bg-cyber-indigo/20 hover:bg-cyber-indigo text-cyber-indigo hover:text-white p-0.5 rounded-lg transition-all cursor-pointer"
                   >
-              <Plus className="h-3.5 w-3.5" />
+                    <Plus className="h-3.5 w-3.5" />
                   </button>
                 </div>
 
-                {/* Role Quick Selector */}
+                {/* Role Quick Selector - Compact on mobile */}
                 <div className="relative" ref={roleRef}>
                   <button
                     onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                    className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-200 transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-2 sm:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-200 transition-all cursor-pointer"
                   >
                     <div
-                      className={`w-2 h-2 rounded-full ${
+                      className={`w-2 h-2 rounded-full shrink-0 ${
                         currentUser.role === 'admin'
                           ? 'bg-red-500 shadow-sm shadow-red-500'
                           : currentUser.role === 'seller'
@@ -255,12 +255,13 @@ export default function Header({
                           : 'bg-emerald-500 shadow-sm shadow-emerald-500'
                       }`}
                     />
-                    <span className="capitalize">{currentUser.username} ({currentUser.role})</span>
-                    <ChevronDown className="h-3 w-3 text-slate-400" />
+                    <span className="capitalize hidden sm:inline">{currentUser.username} ({currentUser.role})</span>
+                    <span className="capitalize sm:hidden">{currentUser.username.charAt(0).toUpperCase()}</span>
+                    <ChevronDown className="h-3 w-3 text-slate-400 shrink-0" />
                   </button>
 
                   {isRoleDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1.5 z-50">
+                    <div className="absolute right-0 mt-2 w-48 sm:w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1.5 z-50">
                       <div className="px-3 py-1 border-b border-slate-800 text-[10px] font-bold text-slate-200">
                         Account Settings
                       </div>
@@ -411,49 +412,71 @@ export default function Header({
       </div>
 
       {/* Mobile Navigation Bar - Premium Glassmorphic design */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-lg border-t border-white/5 flex justify-around py-3 pb-4">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-midnight/90 backdrop-blur-xl border-t border-white/5 flex justify-around py-3 pb-6 px-2 safe-bottom">
         <button
           onClick={() => onTabChange('marketplace')}
-          className={`flex flex-col items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
-            currentTab === 'marketplace' ? 'text-indigo-400' : 'text-slate-500'
+          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+            currentTab === 'marketplace' ? 'text-cyber-indigo' : 'text-slate-500'
           }`}
         >
-          <ShoppingBag className="h-5 w-5" />
-          <span className="text-[9px] font-bold tracking-wider uppercase">Market</span>
+          <div className={`p-1.5 rounded-lg ${currentTab === 'marketplace' ? 'bg-cyber-indigo/10' : ''}`}>
+            <ShoppingBag className="h-5 w-5" />
+          </div>
+          <span className="text-[8px] font-black tracking-[0.1em] uppercase">Market</span>
         </button>
         
         {currentUser && (currentUser.role === 'seller' || currentUser.role === 'admin') && (
           <button
             onClick={() => onTabChange('seller')}
-            className={`flex flex-col items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
+            className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
               currentTab === 'seller' ? 'text-amber-400' : 'text-slate-500'
             }`}
           >
-            <Layers className="h-5 w-5" />
-            <span className="text-[9px] font-bold tracking-wider uppercase">Seller Hub</span>
+            <div className={`p-1.5 rounded-lg ${currentTab === 'seller' ? 'bg-amber-400/10' : ''}`}>
+              <Layers className="h-5 w-5" />
+            </div>
+            <span className="text-[8px] font-black tracking-[0.1em] uppercase">Seller</span>
           </button>
         )}
 
         {currentUser && currentUser.role === 'admin' && (
           <button
             onClick={() => onTabChange('admin')}
-            className={`flex flex-col items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
+            className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
               currentTab === 'admin' ? 'text-red-400' : 'text-slate-500'
             }`}
           >
-            <ShieldCheck className="h-5 w-5" />
-            <span className="text-[9px] font-bold tracking-wider uppercase">Admin</span>
+            <div className={`p-1.5 rounded-lg ${currentTab === 'admin' ? 'bg-red-400/10' : ''}`}>
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <span className="text-[8px] font-black tracking-[0.1em] uppercase">Admin</span>
+          </button>
+        )}
+
+        {currentUser && currentUser.role === 'buyer' && (
+          <button
+            onClick={() => onTabChange('buyer')}
+            className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+              currentTab === 'buyer' ? 'text-rose-400' : 'text-slate-500'
+            }`}
+          >
+            <div className={`p-1.5 rounded-lg ${currentTab === 'buyer' ? 'bg-rose-400/10' : ''}`}>
+              <User className="h-5 w-5" />
+            </div>
+            <span className="text-[8px] font-black tracking-[0.1em] uppercase">Me</span>
           </button>
         )}
 
         <button
           onClick={() => onTabChange('console')}
-          className={`flex flex-col items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
+          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
             currentTab === 'console' ? 'text-emerald-400' : 'text-slate-500'
           }`}
         >
-          <Terminal className="h-5 w-5" />
-          <span className="text-[9px] font-bold tracking-wider uppercase">Console</span>
+          <div className={`p-1.5 rounded-lg ${currentTab === 'console' ? 'bg-emerald-400/10' : ''}`}>
+            <Terminal className="h-5 w-5" />
+          </div>
+          <span className="text-[8px] font-black tracking-[0.1em] uppercase">Console</span>
         </button>
       </div>
     </header>

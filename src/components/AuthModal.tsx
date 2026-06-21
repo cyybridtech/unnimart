@@ -110,38 +110,38 @@ export default function AuthModal({ isOpen, onClose, onLogin, onRegister, demoUs
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl shadow-2xl flex flex-col md:flex-row overflow-hidden my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl w-full max-w-4xl shadow-2xl flex flex-col md:flex-row overflow-hidden my-4 sm:my-8">
         
         {/* Left Side Panel */}
-        <div className="md:w-5/12 bg-gradient-to-br from-indigo-900/40 via-slate-900 to-slate-950 p-8 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col justify-between select-none">
+        <div className="md:w-5/12 bg-gradient-to-br from-indigo-900/40 via-slate-900 to-slate-950 p-6 sm:p-8 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col justify-between select-none">
           <div>
             <div 
               onClick={handleLogoClick}
-              className="flex items-center gap-2.5 mb-8 cursor-pointer active:scale-98 transition-all"
+              className="flex items-center gap-2.5 mb-6 sm:mb-8 cursor-pointer active:scale-98 transition-all"
               title="Click 5 times for Developer Panel"
             >
-              <div className="bg-indigo-600 p-2.5 rounded-2xl text-white shadow-lg shadow-indigo-600/30">
-                <ShoppingBag className="h-5 w-5" />
+              <div className="bg-indigo-600 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl text-white shadow-lg shadow-indigo-600/30">
+                <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <span className="font-extrabold text-xl text-white tracking-tight">UniMart</span>
+              <span className="font-extrabold text-lg sm:text-xl text-white tracking-tight">UniMart</span>
             </div>
             
             {!showDevPane ? (
               // Production Marketing View
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
                     <Shield className="h-4 w-4 text-indigo-400" />
                     Campus Sandbox Network
                   </h3>
-                  <p className="text-[11px] text-indigo-300 font-mono tracking-widest mt-1">SECURE CLIENT-SIDE TRANSACTION PROTOCOL</p>
+                  <p className="text-[10px] sm:text-[11px] text-indigo-300 font-mono tracking-widest mt-1">SECURE CLIENT-SIDE TRANSACTION PROTOCOL</p>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
                   UniMart is a direct peer-to-peer commerce hub built exclusively for university students. 
                   Connect safely to trade vintage items, gourmet dorm-baked snacks, and custom developer or designer services.
                 </p>
-                <div className="space-y-3 pt-2">
+                <div className="space-y-2.5 sm:space-y-3 pt-2">
                   <div className="flex items-center gap-2.5 text-xs text-slate-300 font-medium">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
                     <span>Secure checks via Paystack API</span>
@@ -209,7 +209,7 @@ export default function AuthModal({ isOpen, onClose, onLogin, onRegister, demoUs
         </div>
 
         {/* Right Side: Authentication forms */}
-        <div className="flex-1 p-8 flex flex-col justify-between bg-slate-900">
+        <div className="flex-1 p-6 sm:p-8 flex flex-col justify-between bg-slate-900">
           <div className="flex justify-between items-center mb-6">
             <div className="flex border-b border-slate-800 w-fit">
               <button
@@ -288,10 +288,10 @@ export default function AuthModal({ isOpen, onClose, onLogin, onRegister, demoUs
                   </div>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-2 pb-4 md:pb-0">
                   <button
                     type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold uppercase tracking-wider rounded-xl py-3.5 text-xs transition-all shadow-lg shadow-indigo-600/15 active:scale-98 cursor-pointer"
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold uppercase tracking-wider rounded-xl py-3 sm:py-3.5 text-[10px] sm:text-xs transition-all shadow-lg shadow-indigo-600/15 active:scale-98 cursor-pointer"
                   >
                     Authenticate Securely
                   </button>
@@ -446,10 +446,10 @@ export default function AuthModal({ isOpen, onClose, onLogin, onRegister, demoUs
                   </div>
                 )}
 
-                <div className="pt-2">
+                <div className="pt-2 pb-6 md:pb-0">
                   <button
                     type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold uppercase tracking-wider rounded-xl py-3.5 text-xs transition-all shadow-lg shadow-indigo-600/15 active:scale-98 cursor-pointer"
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold uppercase tracking-wider rounded-xl py-3 sm:py-3.5 text-[10px] sm:text-xs transition-all shadow-lg shadow-indigo-600/15 active:scale-98 cursor-pointer"
                   >
                     {role === 'seller' ? 'Apply for Seller Account' : 'Register Buyer Account'}
                   </button>
