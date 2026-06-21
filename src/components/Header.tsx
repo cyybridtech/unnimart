@@ -82,18 +82,19 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-midnight/90 backdrop-blur-3xl border-b border-white/10 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <>
+    <header className="sticky top-0 z-50 bg-midnight/95 backdrop-blur-3xl border-b border-white/10 shadow-lg">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20">
 
           {/* Logo */}
-          <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group" onClick={() => onTabChange('marketplace')}>
-            <div className="bg-cyber-indigo p-2 rounded-xl sm:p-2.5 sm:rounded-2xl text-white shadow-[0_0_20px_-5px_rgba(99,102,241,0.6)] group-hover:scale-110 transition-all duration-500">
-              <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
+          <div className="flex items-center gap-2 sm:gap-4 cursor-pointer group" onClick={() => onTabChange('marketplace')}>
+            <div className="bg-cyber-indigo p-1.5 rounded-lg sm:p-3 sm:rounded-2xl text-white shadow-[0_0_25px_-5px_rgba(99,102,241,0.7)] group-hover:scale-105 transition-all duration-300">
+              <ShoppingBag className="h-4 w-4 sm:h-6 sm:w-6" />
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center">
-              <span className="font-black text-lg sm:text-xl text-white tracking-tighter uppercase leading-none">UniMart</span>
-              <span className="hidden sm:inline-block text-[9px] sm:text-[10px] text-cyber-cyan font-bold sm:ml-1.5 px-1.5 sm:px-2 py-0.5 rounded-full bg-cyber-indigo/10 border border-cyber-indigo/20 tracking-widest uppercase mt-0.5 sm:mt-0">
+            <div className="flex flex-col">
+              <span className="font-black text-base sm:text-2xl text-white tracking-tighter uppercase leading-none">UniMart</span>
+              <span className="text-[8px] sm:text-[10px] text-cyber-cyan font-bold tracking-widest uppercase mt-0.5 opacity-80">
                 Nexus
               </span>
             </div>
@@ -297,11 +298,11 @@ export default function Header({
               <div className="relative" ref={cartRef}>
                 <button
                   onClick={() => setIsCartOpen(!isCartOpen)}
-                  className="bg-slate-900 border border-slate-800 hover:border-slate-700 p-2.5 rounded-xl text-slate-300 hover:text-white transition-all relative cursor-pointer"
+                  className="bg-slate-900/80 border border-slate-800 hover:border-slate-700 p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-white transition-all relative cursor-pointer"
                 >
-                  <ShoppingCart className="h-4 w-4" />
+                  <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                   {cartItemCount > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 bg-indigo-500 text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-950">
+                    <span className="absolute -top-1.5 -right-1.5 bg-indigo-500 text-white font-bold text-[9px] sm:text-[10px] w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-slate-950">
                       {cartItemCount}
                     </span>
                   )}
@@ -309,7 +310,7 @@ export default function Header({
 
                 {/* Cart Dropdown */}
                 {isCartOpen && (
-                  <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 z-50">
+                  <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     <h3 className="text-sm font-bold text-slate-200 mb-3 border-b border-slate-800 pb-2 flex items-center justify-between">
                       <span>My Shopping Cart</span>
                       <span className="text-xs text-indigo-400 font-medium">({cartItemCount} items)</span>
@@ -410,75 +411,76 @@ export default function Header({
           </div>
         </div>
       </div>
-
-      {/* Mobile Navigation Bar - Premium Glassmorphic design */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-midnight/95 backdrop-blur-2xl border-t border-white/10 flex justify-around py-3 pb-8 px-2 safe-bottom shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)]">
-        <button
-          onClick={() => onTabChange('marketplace')}
-          className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
-            currentTab === 'marketplace' ? 'text-cyber-indigo' : 'text-slate-400'
-          }`}
-        >
-          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'marketplace' ? 'bg-cyber-indigo/20' : 'bg-transparent'}`}>
-            <ShoppingBag className="h-6 w-6" />
-          </div>
-          <span className="text-[10px] font-black tracking-widest uppercase">Market</span>
-        </button>
-        
-        {currentUser && (currentUser.role === 'seller' || currentUser.role === 'admin') && (
-          <button
-            onClick={() => onTabChange('seller')}
-            className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
-              currentTab === 'seller' ? 'text-amber-400' : 'text-slate-400'
-            }`}
-          >
-            <div className={`p-2 rounded-xl transition-colors ${currentTab === 'seller' ? 'bg-amber-400/20' : 'bg-transparent'}`}>
-              <Layers className="h-6 w-6" />
-            </div>
-            <span className="text-[10px] font-black tracking-widest uppercase">Seller</span>
-          </button>
-        )}
-
-        {currentUser && currentUser.role === 'admin' && (
-          <button
-            onClick={() => onTabChange('admin')}
-            className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
-              currentTab === 'admin' ? 'text-red-400' : 'text-slate-400'
-            }`}
-          >
-            <div className={`p-2 rounded-xl transition-colors ${currentTab === 'admin' ? 'bg-red-400/20' : 'bg-transparent'}`}>
-              <ShieldCheck className="h-6 w-6" />
-            </div>
-            <span className="text-[10px] font-black tracking-widest uppercase">Admin</span>
-          </button>
-        )}
-
-        {currentUser && currentUser.role === 'buyer' && (
-          <button
-            onClick={() => onTabChange('buyer')}
-            className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
-              currentTab === 'buyer' ? 'text-rose-400' : 'text-slate-400'
-            }`}
-          >
-            <div className={`p-2 rounded-xl transition-colors ${currentTab === 'buyer' ? 'bg-rose-400/20' : 'bg-transparent'}`}>
-              <User className="h-6 w-6" />
-            </div>
-            <span className="text-[10px] font-black tracking-widest uppercase">Me</span>
-          </button>
-        )}
-
-        <button
-          onClick={() => onTabChange('console')}
-          className={`flex flex-col items-center gap-1 transition-all active:scale-95 cursor-pointer ${
-            currentTab === 'console' ? 'text-emerald-400' : 'text-slate-400'
-          }`}
-        >
-          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'console' ? 'bg-emerald-400/20' : 'bg-transparent'}`}>
-            <Terminal className="h-6 w-6" />
-          </div>
-          <span className="text-[10px] font-black tracking-widest uppercase">Console</span>
-        </button>
-      </div>
     </header>
+
+    {/* Mobile Navigation Bar - Moved OUTSIDE header to escape stacking context issues */}
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-midnight/95 backdrop-blur-2xl border-t border-white/10 flex justify-around py-3 pb-8 px-2 safe-bottom shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.7)]">
+      <button
+        onClick={() => onTabChange('marketplace')}
+        className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+          currentTab === 'marketplace' ? 'text-cyber-indigo' : 'text-slate-400'
+        }`}
+      >
+        <div className={`p-2 rounded-xl transition-colors ${currentTab === 'marketplace' ? 'bg-cyber-indigo/20' : 'bg-transparent'}`}>
+          <ShoppingBag className="h-6 w-6" />
+        </div>
+        <span className="text-[10px] font-black tracking-widest uppercase">Market</span>
+      </button>
+
+      {currentUser && (currentUser.role === 'seller' || currentUser.role === 'admin') && (
+        <button
+          onClick={() => onTabChange('seller')}
+          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+            currentTab === 'seller' ? 'text-amber-400' : 'text-slate-400'
+          }`}
+        >
+          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'seller' ? 'bg-amber-400/20' : 'bg-transparent'}`}>
+            <Layers className="h-6 w-6" />
+          </div>
+          <span className="text-[10px] font-black tracking-widest uppercase">Seller</span>
+        </button>
+      )}
+
+      {currentUser && currentUser.role === 'admin' && (
+        <button
+          onClick={() => onTabChange('admin')}
+          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+            currentTab === 'admin' ? 'text-red-400' : 'text-slate-400'
+          }`}
+        >
+          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'admin' ? 'bg-red-400/20' : 'bg-transparent'}`}>
+            <ShieldCheck className="h-6 w-6" />
+          </div>
+          <span className="text-[10px] font-black tracking-widest uppercase">Admin</span>
+        </button>
+      )}
+
+      {currentUser && currentUser.role === 'buyer' && (
+        <button
+          onClick={() => onTabChange('buyer')}
+          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+            currentTab === 'buyer' ? 'text-rose-400' : 'text-slate-400'
+          }`}
+        >
+          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'buyer' ? 'bg-rose-400/20' : 'bg-transparent'}`}>
+            <User className="h-6 w-6" />
+          </div>
+          <span className="text-[10px] font-black tracking-widest uppercase">Me</span>
+        </button>
+      )}
+
+      <button
+        onClick={() => onTabChange('console')}
+        className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+          currentTab === 'console' ? 'text-emerald-400' : 'text-slate-400'
+        }`}
+      >
+        <div className={`p-2 rounded-xl transition-colors ${currentTab === 'console' ? 'bg-emerald-400/20' : 'bg-transparent'}`}>
+          <Terminal className="h-6 w-6" />
+        </div>
+        <span className="text-[10px] font-black tracking-widest uppercase">Console</span>
+      </button>
+    </div>
+    </>
   );
 }
