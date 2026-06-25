@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ShoppingCart, Wallet, Layers, ShoppingBag, Trash2, ChevronDown, Plus, ShieldCheck, Terminal } from 'lucide-react';
-import { User, OrderItem } from '../data/mockData';
+import { ShoppingCart, Wallet, Layers, ShoppingBag, Trash2, ChevronDown, Plus, ShieldCheck, Terminal, Bell, User, Check } from 'lucide-react';
+import type { User as UserType, OrderItem } from '../data/mockData';
 
 interface HeaderProps {
-  currentUser: User | null;
+  currentUser: UserType | null;
   currentTab: string;
   onTabChange: (tab: string) => void;
   cart: OrderItem[];
@@ -12,6 +12,8 @@ interface HeaderProps {
   onOpenAuth: () => void;
   onLogout: () => void;
   onChangeRole: (role: 'admin' | 'seller' | 'buyer') => void;
+  notifications?: any[];
+  onMarkNotificationRead?: (id: number) => void;
 }
 
 export default function Header({
@@ -24,24 +26,32 @@ export default function Header({
   onOpenAuth,
   onLogout,
   onChangeRole,
+  notifications = [],
+  onMarkNotificationRead
 }: HeaderProps) {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
   const [shippingAddress, setShippingAddress] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [checkoutError, setCheckoutError] = useState('');
 
   const cartRef = useRef<HTMLDivElement>(null);
+  const notificationsRef = useRef<HTMLDivElement>(null);
   const roleRef = useRef<HTMLDivElement>(null);
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const unreadNotifications = notifications.filter(n => !n.is_read).length;
 
   // ── Close dropdowns on outside click ──────────────────────────────────────
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (cartRef.current && !cartRef.current.contains(e.target as Node)) {
         setIsCartOpen(false);
+      }
+      if (notificationsRef.current && !notificationsRef.current.contains(e.target as Node)) {
+        setIsNotificationsOpen(false);
       }
       if (roleRef.current && !roleRef.current.contains(e.target as Node)) {
         setIsRoleDropdownOpen(false);
@@ -72,35 +82,49 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <>
+    <header className="sticky top-0 z-50 bg-midnight/95 backdrop-blur-3xl border-b border-white/10 shadow-lg">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20">
 
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => onTabChange('marketplace')}>
-            <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-600/20">
-              <ShoppingBag className="h-5 w-5" />
+          <div className="flex items-center gap-1.5 sm:gap-4 cursor-pointer group shrink-0" onClick={() => onTabChange('marketplace')}>
+            <div className="bg-cyber-indigo p-1.5 rounded-lg sm:p-3 sm:rounded-2xl text-white shadow-[0_0_25px_-5px_rgba(99,102,241,0.7)] group-hover:scale-105 transition-all duration-300 shrink-0">
+              <ShoppingBag className="h-4 w-4 sm:h-6 sm:w-6" />
             </div>
-            <div>
-              <span className="font-bold text-lg text-white tracking-tight block sm:inline">UniMart</span>
-              <span className="hidden sm:inline-block text-[10px] text-indigo-400 font-medium ml-1.5 px-1.5 py-0.5 rounded bg-indigo-950 border border-indigo-800/40">
-                CAMPUS HUB
+            <div className="flex flex-col">
+              <span className="font-black text-sm sm:text-2xl text-white tracking-tighter uppercase leading-none">UniMart</span>
+              <span className="text-[7px] sm:text-[10px] text-cyber-cyan font-bold tracking-widest uppercase mt-0.5 opacity-80">
+                Nexus
               </span>
             </div>
           </div>
 
           {/* Main Tabs */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             <button
               onClick={() => onTabChange('marketplace')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all cursor-pointer ${
                 currentTab === 'marketplace'
-                  ? 'bg-slate-800 text-white border-t-2 border-indigo-500 rounded-t-xl rounded-b-none'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                  ? 'bg-white/5 text-white border-b-2 border-cyber-indigo'
+                  : 'text-slate-500 hover:text-white hover:bg-white/5'
               }`}
             >
-              Marketplace
+              Explore
             </button>
+
+            {currentUser && currentUser.role === 'buyer' && (
+              <button
+                onClick={() => onTabChange('buyer')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  currentTab === 'buyer'
+                    ? 'bg-slate-800 text-white border-t-2 border-rose-500 rounded-t-xl rounded-b-none'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                }`}
+              >
+                My Dashboard
+              </button>
+            )}
 
             {currentUser && (currentUser.role === 'seller' || currentUser.role === 'admin') && (
               <button
@@ -142,33 +166,89 @@ export default function Header({
           </nav>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+
+            {/* Notifications - Hidden on Mobile, moved to dashboards */}
+            {currentUser && (
+              <div className="hidden sm:block relative" ref={notificationsRef}>
+                <button
+                  onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                  className="bg-slate-900 border border-slate-800 hover:border-slate-700 p-2.5 rounded-xl text-slate-300 hover:text-white transition-all relative cursor-pointer"
+                >
+                  <Bell className="h-4 w-4" />
+                  {unreadNotifications > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-cyber-indigo text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-midnight">
+                      {unreadNotifications}
+                    </span>
+                  )}
+                </button>
+
+                {isNotificationsOpen && (
+                  <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 z-50">
+                    <h3 className="text-sm font-bold text-slate-200 mb-3 border-b border-slate-800 pb-2">
+                      Notifications
+                    </h3>
+                    <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                      {notifications.length === 0 ? (
+                        <p className="text-xs text-slate-500 text-center py-4">No notifications yet.</p>
+                      ) : (
+                        notifications.map(n => (
+                          <div
+                            key={n.id}
+                            className={`p-3 rounded-xl border transition-all ${n.is_read ? 'bg-slate-950/40 border-transparent opacity-60' : 'bg-indigo-500/5 border-indigo-500/20'}`}
+                          >
+                            <div className="flex justify-between items-start gap-2">
+                              <div>
+                                <p className="text-xs font-bold text-white">{n.title}</p>
+                                <p className="text-[10px] text-slate-400 mt-0.5">{n.message}</p>
+                              </div>
+                              {!n.is_read && (
+                                <button
+                                  onClick={() => onMarkNotificationRead?.(n.id)}
+                                  className="p-1 hover:bg-indigo-500/20 rounded-md text-indigo-400 transition-all"
+                                  title="Mark as read"
+                                >
+                                  <Check className="h-3 w-3" />
+                                </button>
+                              )}
+                            </div>
+                            <p className="text-[8px] text-slate-600 mt-2 uppercase font-bold tracking-tighter">
+                              {new Date(n.created_at).toLocaleString()}
+                            </p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* User Session / Role Switcher */}
             {currentUser ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
 
-                {/* Wallet Balance */}
-                <div className="hidden sm:flex items-center bg-slate-900 border border-slate-800 rounded-xl py-1 px-3 text-xs text-slate-300 gap-1.5">
-                  <Wallet className="h-3.5 w-3.5 text-indigo-400" />
-                  <span className="font-mono font-bold">${currentUser.balance.toFixed(2)}</span>
+                {/* Wallet Balance - Compact on mobile */}
+                <div className="flex items-center glass-card border border-white/5 rounded-xl sm:rounded-2xl py-1 sm:py-1.5 px-2.5 sm:px-4 text-[10px] sm:text-xs text-slate-300 gap-1.5 sm:gap-2">
+                  <Wallet className="h-3 w-3 sm:h-4 sm:w-4 text-cyber-cyan" />
+                  <span className="font-mono font-black text-white tracking-tighter">${currentUser.balance.toFixed(2)}</span>
                   <button
                     onClick={() => {}}
-                    title="Balance reflects your account. Payments via Paystack."
-                    className="ml-1 bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white p-0.5 rounded transition-all cursor-pointer"
+                    title="Balance reflects your account."
+                    className="hidden sm:block ml-1 bg-cyber-indigo/20 hover:bg-cyber-indigo text-cyber-indigo hover:text-white p-0.5 rounded-lg transition-all cursor-pointer"
                   >
-                    <Plus className="h-3 w-3" />
+                    <Plus className="h-3.5 w-3.5" />
                   </button>
                 </div>
 
-                {/* Role Quick Selector */}
+                {/* Role Quick Selector - Compact on mobile */}
                 <div className="relative" ref={roleRef}>
                   <button
                     onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                    className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-200 transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-2 sm:px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold text-slate-200 transition-all cursor-pointer"
                   >
                     <div
-                      className={`w-2 h-2 rounded-full ${
+                      className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${
                         currentUser.role === 'admin'
                           ? 'bg-red-500 shadow-sm shadow-red-500'
                           : currentUser.role === 'seller'
@@ -176,35 +256,21 @@ export default function Header({
                           : 'bg-emerald-500 shadow-sm shadow-emerald-500'
                       }`}
                     />
-                    <span className="capitalize">{currentUser.username} ({currentUser.role})</span>
-                    <ChevronDown className="h-3 w-3 text-slate-400" />
+                    <span className="capitalize hidden sm:inline">{currentUser.username} ({currentUser.role})</span>
+                    <span className="capitalize sm:hidden">{currentUser.username.charAt(0).toUpperCase()}</span>
+                    <ChevronDown className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-slate-400 shrink-0" />
                   </button>
 
                   {isRoleDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1.5 z-50">
-                      <div className="px-3 py-1 border-b border-slate-800 text-[10px] font-bold text-slate-500 uppercase">
-                        Switch Demo Session
+                    <div className="absolute right-0 mt-2 w-48 sm:w-52 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1.5 z-50">
+                      <div className="px-3 py-1 border-b border-slate-800 text-[10px] font-bold text-slate-200">
+                        Account Settings
                       </div>
                       <button
-                        onClick={() => handleQuickRoleChange('admin')}
-                        className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-red-950/20 hover:text-red-400 flex items-center gap-2 cursor-pointer"
+                        onClick={() => { onTabChange(currentUser.role === 'buyer' ? 'buyer' : currentUser.role === 'seller' ? 'seller' : 'admin'); setIsRoleDropdownOpen(false); }}
+                        className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 flex items-center gap-2 cursor-pointer"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                        Admin — Alex (alex_lead_admin)
-                      </button>
-                      <button
-                        onClick={() => handleQuickRoleChange('seller')}
-                        className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-amber-950/20 hover:text-amber-400 flex items-center gap-2 cursor-pointer"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                        Seller — Sarah (sarah_bags)
-                      </button>
-                      <button
-                        onClick={() => handleQuickRoleChange('buyer')}
-                        className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-emerald-950/20 hover:text-emerald-400 flex items-center gap-2 cursor-pointer"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        Buyer — Jordan (jordan_buyer)
+                        <User className="h-3.5 w-3.5" /> Profile Settings
                       </button>
                       <div className="border-t border-slate-800 my-1" />
                       <button
@@ -221,9 +287,10 @@ export default function Header({
             ) : (
               <button
                 onClick={onOpenAuth}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-md shadow-indigo-600/10 active:scale-95 cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] sm:text-xs font-semibold px-2 sm:px-4 py-2 rounded-lg sm:rounded-xl transition-all shadow-md shadow-indigo-600/10 active:scale-95 cursor-pointer shrink-0"
               >
-                Connect Account
+                <span className="hidden sm:inline">Connect Account</span>
+                <span className="sm:hidden">Connect</span>
               </button>
             )}
 
@@ -232,11 +299,11 @@ export default function Header({
               <div className="relative" ref={cartRef}>
                 <button
                   onClick={() => setIsCartOpen(!isCartOpen)}
-                  className="bg-slate-900 border border-slate-800 hover:border-slate-700 p-2.5 rounded-xl text-slate-300 hover:text-white transition-all relative cursor-pointer"
+                  className="bg-slate-900/80 border border-slate-800 hover:border-slate-700 p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-white transition-all relative cursor-pointer"
                 >
-                  <ShoppingCart className="h-4 w-4" />
+                  <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                   {cartItemCount > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 bg-indigo-500 text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-950">
+                    <span className="absolute -top-1.5 -right-1.5 bg-indigo-500 text-white font-bold text-[9px] sm:text-[10px] w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-slate-950">
                       {cartItemCount}
                     </span>
                   )}
@@ -244,7 +311,7 @@ export default function Header({
 
                 {/* Cart Dropdown */}
                 {isCartOpen && (
-                  <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 z-50">
+                  <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     <h3 className="text-sm font-bold text-slate-200 mb-3 border-b border-slate-800 pb-2 flex items-center justify-between">
                       <span>My Shopping Cart</span>
                       <span className="text-xs text-indigo-400 font-medium">({cartItemCount} items)</span>
@@ -345,53 +412,76 @@ export default function Header({
           </div>
         </div>
       </div>
-
-      {/* Mobile Navigation Bar - Premium Glassmorphic design */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-lg border-t border-white/5 flex justify-around py-3 pb-4">
-        <button
-          onClick={() => onTabChange('marketplace')}
-          className={`flex flex-col items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
-            currentTab === 'marketplace' ? 'text-indigo-400' : 'text-slate-500'
-          }`}
-        >
-          <ShoppingBag className="h-5 w-5" />
-          <span className="text-[9px] font-bold tracking-wider uppercase">Market</span>
-        </button>
-        
-        {currentUser && (currentUser.role === 'seller' || currentUser.role === 'admin') && (
-          <button
-            onClick={() => onTabChange('seller')}
-            className={`flex flex-col items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
-              currentTab === 'seller' ? 'text-amber-400' : 'text-slate-500'
-            }`}
-          >
-            <Layers className="h-5 w-5" />
-            <span className="text-[9px] font-bold tracking-wider uppercase">Seller Hub</span>
-          </button>
-        )}
-
-        {currentUser && currentUser.role === 'admin' && (
-          <button
-            onClick={() => onTabChange('admin')}
-            className={`flex flex-col items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
-              currentTab === 'admin' ? 'text-red-400' : 'text-slate-500'
-            }`}
-          >
-            <ShieldCheck className="h-5 w-5" />
-            <span className="text-[9px] font-bold tracking-wider uppercase">Admin</span>
-          </button>
-        )}
-
-        <button
-          onClick={() => onTabChange('console')}
-          className={`flex flex-col items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
-            currentTab === 'console' ? 'text-emerald-400' : 'text-slate-500'
-          }`}
-        >
-          <Terminal className="h-5 w-5" />
-          <span className="text-[9px] font-bold tracking-wider uppercase">Console</span>
-        </button>
-      </div>
     </header>
+
+    {/* Mobile Navigation Bar - Moved OUTSIDE header to escape stacking context issues */}
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-midnight/95 backdrop-blur-2xl border-t border-white/10 flex justify-around py-3 pb-8 px-2 safe-bottom shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.7)]">
+      <button
+        onClick={() => onTabChange('marketplace')}
+        className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+          currentTab === 'marketplace' ? 'text-cyber-indigo' : 'text-slate-400'
+        }`}
+      >
+        <div className={`p-2 rounded-xl transition-colors ${currentTab === 'marketplace' ? 'bg-cyber-indigo/20' : 'bg-transparent'}`}>
+          <ShoppingBag className="h-6 w-6" />
+        </div>
+        <span className="text-[10px] font-black tracking-widest uppercase">Market</span>
+      </button>
+
+      {currentUser && (currentUser.role === 'seller' || currentUser.role === 'admin') && (
+        <button
+          onClick={() => onTabChange('seller')}
+          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+            currentTab === 'seller' ? 'text-amber-400' : 'text-slate-400'
+          }`}
+        >
+          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'seller' ? 'bg-amber-400/20' : 'bg-transparent'}`}>
+            <Layers className="h-6 w-6" />
+          </div>
+          <span className="text-[10px] font-black tracking-widest uppercase">Seller</span>
+        </button>
+      )}
+
+      {currentUser && currentUser.role === 'admin' && (
+        <button
+          onClick={() => onTabChange('admin')}
+          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+            currentTab === 'admin' ? 'text-red-400' : 'text-slate-400'
+          }`}
+        >
+          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'admin' ? 'bg-red-400/20' : 'bg-transparent'}`}>
+            <ShieldCheck className="h-6 w-6" />
+          </div>
+          <span className="text-[10px] font-black tracking-widest uppercase">Admin</span>
+        </button>
+      )}
+
+      {currentUser && currentUser.role === 'buyer' && (
+        <button
+          onClick={() => onTabChange('buyer')}
+          className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+            currentTab === 'buyer' ? 'text-rose-400' : 'text-slate-400'
+          }`}
+        >
+          <div className={`p-2 rounded-xl transition-colors ${currentTab === 'buyer' ? 'bg-rose-400/20' : 'bg-transparent'}`}>
+            <User className="h-6 w-6" />
+          </div>
+          <span className="text-[10px] font-black tracking-widest uppercase">Me</span>
+        </button>
+      )}
+
+      <button
+        onClick={() => onTabChange('console')}
+        className={`flex flex-col items-center gap-1 transition-all active:scale-90 cursor-pointer ${
+          currentTab === 'console' ? 'text-emerald-400' : 'text-slate-400'
+        }`}
+      >
+        <div className={`p-2 rounded-xl transition-colors ${currentTab === 'console' ? 'bg-emerald-400/20' : 'bg-transparent'}`}>
+          <Terminal className="h-6 w-6" />
+        </div>
+        <span className="text-[10px] font-black tracking-widest uppercase">Console</span>
+      </button>
+    </div>
+    </>
   );
 }

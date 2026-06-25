@@ -1,5 +1,5 @@
 import { Users, ShieldCheck, DollarSign, ShoppingBag, UserMinus, UserCheck, Check, X, Settings, Key, RefreshCw, Database } from 'lucide-react';
-import { User, SellerProfile, Product, Order } from '../data/mockData';
+import { type User, SellerProfile, Product, Order } from '../data/mockData';
 import { useState } from 'react';
 
 interface AdminPanelProps {
@@ -46,8 +46,8 @@ export default function AdminPanel({
 
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <ShieldCheck className="h-5 w-5 text-red-500" />
+        <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+          <ShieldCheck className="h-5 w-5 text-red-500 shrink-0" />
           Super Admin Control Panel
         </h2>
         <p className="text-xs text-slate-400 mt-0.5">
@@ -56,52 +56,52 @@ export default function AdminPanel({
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4">
-          <div className="bg-red-500/10 p-3 rounded-xl text-red-400">
-            <Users className="h-6 w-6" />
+        <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 sm:p-5 flex items-center gap-4">
+          <div className="bg-red-500/10 p-2 sm:p-3 rounded-xl text-red-400 shrink-0">
+            <Users className="h-5 sm:h-6 w-5 sm:w-6" />
           </div>
-          <div>
-            <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">Total Campus Users</span>
-            <span className="font-mono text-lg font-black text-white">{users.length}</span>
-            <span className="text-[9px] text-slate-500 block mt-0.5">
+          <div className="min-w-0">
+            <span className="text-[9px] sm:text-[10px] text-slate-500 font-semibold uppercase tracking-wider block truncate">Total Campus Users</span>
+            <span className="font-mono text-base sm:text-lg font-black text-white">{users.length}</span>
+            <span className="text-[8px] sm:text-[9px] text-slate-500 block mt-0.5 truncate">
               {activeSellers.length} Sellers | {activeBuyers.length} Buyers
             </span>
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4">
-          <div className="bg-emerald-500/10 p-3 rounded-xl text-emerald-400">
-            <DollarSign className="h-6 w-6" />
+        <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 sm:p-5 flex items-center gap-4">
+          <div className="bg-emerald-500/10 p-2 sm:p-3 rounded-xl text-emerald-400 shrink-0">
+            <DollarSign className="h-5 sm:h-6 w-5 sm:w-6" />
           </div>
-          <div>
-            <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">Total Sales Volume</span>
-            <span className="font-mono text-lg font-black text-white">${totalSalesVolume.toFixed(2)}</span>
-            <span className="text-[9px] text-emerald-400 block mt-0.5">Through peer network</span>
-          </div>
-        </div>
-
-        <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4">
-          <div className="bg-indigo-500/10 p-3 rounded-xl text-indigo-400">
-            <ShoppingBag className="h-6 w-6" />
-          </div>
-          <div>
-            <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">Completed Orders</span>
-            <span className="font-mono text-lg font-black text-white">{completedOrders.length}</span>
-            <span className="text-[9px] text-indigo-400 block mt-0.5">of {orders.length} total orders</span>
+          <div className="min-w-0">
+            <span className="text-[9px] sm:text-[10px] text-slate-500 font-semibold uppercase tracking-wider block truncate">Total Sales Volume</span>
+            <span className="font-mono text-base sm:text-lg font-black text-white">${totalSalesVolume.toFixed(2)}</span>
+            <span className="text-[8px] sm:text-[9px] text-emerald-400 block mt-0.5 truncate">Through peer network</span>
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4">
-          <div className="bg-purple-500/10 p-3 rounded-xl text-purple-400">
-            <ShoppingBag className="h-6 w-6" />
+        <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 sm:p-5 flex items-center gap-4">
+          <div className="bg-indigo-500/10 p-2 sm:p-3 rounded-xl text-indigo-400 shrink-0">
+            <ShoppingBag className="h-5 sm:h-6 w-5 sm:w-6" />
           </div>
-          <div>
-            <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">Active Listings</span>
-            <span className="font-mono text-lg font-black text-white">{products.length}</span>
-            <span className="text-[9px] text-purple-400 block mt-0.5">
-              {products.filter((p) => p.is_preorder).length} Pre-order initiatives
+          <div className="min-w-0">
+            <span className="text-[9px] sm:text-[10px] text-slate-500 font-semibold uppercase tracking-wider block truncate">Completed Orders</span>
+            <span className="font-mono text-base sm:text-lg font-black text-white">{completedOrders.length}</span>
+            <span className="text-[8px] sm:text-[9px] text-indigo-400 block mt-0.5 truncate">of {orders.length} total orders</span>
+          </div>
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 sm:p-5 flex items-center gap-4">
+          <div className="bg-purple-500/10 p-2 sm:p-3 rounded-xl text-purple-400 shrink-0">
+            <ShoppingBag className="h-5 sm:h-6 w-5 sm:w-6" />
+          </div>
+          <div className="min-w-0">
+            <span className="text-[9px] sm:text-[10px] text-slate-500 font-semibold uppercase tracking-wider block truncate">Active Listings</span>
+            <span className="font-mono text-base sm:text-lg font-black text-white">{products.length}</span>
+            <span className="text-[8px] sm:text-[9px] text-purple-400 block mt-0.5 truncate">
+              {products.filter((p) => p.is_preorder).length} Pre-orders
             </span>
           </div>
         </div>
@@ -201,7 +201,7 @@ export default function AdminPanel({
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs">
+              <table className="w-full text-left border-collapse text-xs min-w-[500px]">
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-500 font-bold uppercase tracking-wider text-[9px]">
                     <th className="py-2.5 px-2">ID</th>
