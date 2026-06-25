@@ -88,13 +88,13 @@ export default function Header({
         <div className="flex items-center justify-between h-16 sm:h-20">
 
           {/* Logo */}
-          <div className="flex items-center gap-2 sm:gap-4 cursor-pointer group" onClick={() => onTabChange('marketplace')}>
-            <div className="bg-cyber-indigo p-1.5 rounded-lg sm:p-3 sm:rounded-2xl text-white shadow-[0_0_25px_-5px_rgba(99,102,241,0.7)] group-hover:scale-105 transition-all duration-300">
+          <div className="flex items-center gap-1.5 sm:gap-4 cursor-pointer group shrink-0" onClick={() => onTabChange('marketplace')}>
+            <div className="bg-cyber-indigo p-1.5 rounded-lg sm:p-3 sm:rounded-2xl text-white shadow-[0_0_25px_-5px_rgba(99,102,241,0.7)] group-hover:scale-105 transition-all duration-300 shrink-0">
               <ShoppingBag className="h-4 w-4 sm:h-6 sm:w-6" />
             </div>
             <div className="flex flex-col">
-              <span className="font-black text-base sm:text-2xl text-white tracking-tighter uppercase leading-none">UniMart</span>
-              <span className="text-[8px] sm:text-[10px] text-cyber-cyan font-bold tracking-widest uppercase mt-0.5 opacity-80">
+              <span className="font-black text-sm sm:text-2xl text-white tracking-tighter uppercase leading-none">UniMart</span>
+              <span className="text-[7px] sm:text-[10px] text-cyber-cyan font-bold tracking-widest uppercase mt-0.5 opacity-80">
                 Nexus
               </span>
             </div>
@@ -166,7 +166,7 @@ export default function Header({
           </nav>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
 
             {/* Notifications - Hidden on Mobile, moved to dashboards */}
             {currentUser && (
@@ -287,9 +287,10 @@ export default function Header({
             ) : (
               <button
                 onClick={onOpenAuth}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-md shadow-indigo-600/10 active:scale-95 cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] sm:text-xs font-semibold px-2 sm:px-4 py-2 rounded-lg sm:rounded-xl transition-all shadow-md shadow-indigo-600/10 active:scale-95 cursor-pointer shrink-0"
               >
-                Connect Account
+                <span className="hidden sm:inline">Connect Account</span>
+                <span className="sm:hidden">Connect</span>
               </button>
             )}
 

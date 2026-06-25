@@ -74,18 +74,31 @@ router.get('/my-orders', authenticateToken, (req, res) => {
   try {
     let orders;
     if (req.user.role === 'admin') {
-      orders = db.prepare('SELECT * FROM orders ORDER BY created_at DESC').all();
+      orders = db.prepare(`
+        SELECT o.*, u.username as buyer_name
+        FROM orders o
+        JOIN users u ON o.buyer_id = u.id
+        ORDER BY o.created_at DESC
+      `).all();
     } else if (req.user.role === 'seller') {
       // Get orders that contain items from this seller
       orders = db.prepare(`
-        SELECT DISTINCT o.* FROM orders o
+        SELECT DISTINCT o.*, u.username as buyer_name
+        FROM orders o
         JOIN order_items oi ON o.id = oi.order_id
         JOIN products p ON oi.product_id = p.id
+        JOIN users u ON o.buyer_id = u.id
         WHERE p.seller_id = ?
         ORDER BY o.created_at DESC
       `).all(req.user.id);
     } else {
-      orders = db.prepare('SELECT * FROM orders WHERE buyer_id = ? ORDER BY created_at DESC').all(req.user.id);
+      orders = db.prepare(`
+        SELECT o.*, u.username as buyer_name
+        FROM orders o
+        JOIN users u ON o.buyer_id = u.id
+        WHERE o.buyer_id = ?
+        ORDER BY o.created_at DESC
+      `).all(req.user.id);
     }
 
     // Add items to each order

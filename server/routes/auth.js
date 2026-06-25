@@ -8,6 +8,17 @@ const db = require('../database');
 router.post('/register', async (req, res) => {
   const { username, email, password, role, phone, dorm } = req.body;
 
+  // Prevent privilege escalation: users cannot register as admin
+  if (role === 'admin') {
+    return res.status(403).json({ message: 'Cannot register as an administrator' });
+  }
+
+  // Validate allowed roles
+  const allowedRoles = ['buyer', 'seller'];
+  if (!allowedRoles.includes(role)) {
+    return res.status(400).json({ message: 'Invalid role specified' });
+  }
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const status = role === 'seller' ? 'pending' : 'active';

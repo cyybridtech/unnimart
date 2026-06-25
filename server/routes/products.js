@@ -15,7 +15,12 @@ router.get('/', (req, res) => {
     inStock
   } = req.query;
 
-  let query = "SELECT * FROM products WHERE status = 'active'";
+  let query = `
+    SELECT p.*, u.username as seller_name
+    FROM products p
+    JOIN users u ON p.seller_id = u.id
+    WHERE p.status = 'active'
+  `;
   const params = [];
 
   if (category && category !== 'All') {
